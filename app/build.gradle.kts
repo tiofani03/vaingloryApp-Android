@@ -116,4 +116,7 @@ dependencies {
     //chucker
     debugImplementation("com.github.chuckerteam.chucker:library:3.5.2")
     releaseImplementation("com.github.chuckerteam.chucker:library-no-op:3.5.2")
+
+    //lotties
+    implementation("com.airbnb.android:lottie-compose:6.0.1")
 }
