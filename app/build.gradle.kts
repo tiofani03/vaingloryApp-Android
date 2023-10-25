@@ -94,6 +94,9 @@ dependencies {
     // DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+
     // Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.48.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0-rc01")

@@ -26,8 +26,8 @@ data class Hero(
 @Serializable
 data class PowerStatus(
     val name: String,
-    val currentValue: Int,
-    val maxValue: Int,
+    val currentValue: Double,
+    val maxValue: Double,
 )
 
 @Serializable

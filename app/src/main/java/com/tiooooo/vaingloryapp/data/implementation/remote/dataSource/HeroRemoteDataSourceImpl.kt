@@ -10,8 +10,10 @@ import com.tiooooo.vaingloryapp.data.implementation.remote.api.HeroApi
 import com.tiooooo.vaingloryapp.data.api.dataSource.HeroRemoteDataSource
 import com.tiooooo.vaingloryapp.data.model.Hero
 import com.tiooooo.vaingloryapp.data.pagingSource.SearchHeroesSource
+import com.tiooooo.vaingloryapp.utils.response.States
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @ExperimentalPagingApi
 class HeroRemoteDataSourceImpl @Inject constructor(
@@ -40,6 +42,22 @@ class HeroRemoteDataSourceImpl @Inject constructor(
                 SearchHeroesSource(heroApi, query)
             }
         ).flow
+    }
+
+    override fun getDetailHero(heroId: Int) = flow {
+        try {
+            val response = heroApi.getHeroDetail(heroId)
+
+            if (response.data == null) {
+                emit(States.Error("Data tidak ditemukan"))
+            } else {
+                emit(States.Success(response.data))
+            }
+
+
+        } catch (e: Exception) {
+            emit(States.Error(e.message.toString()))
+        }
     }
 
 }

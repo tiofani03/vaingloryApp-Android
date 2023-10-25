@@ -25,7 +25,6 @@ fun SetupNavGraph(
     navController: NavHostController,
 ) {
     val modifier = Modifier
-        .fillMaxSize()
         .background(MaterialTheme.colorScheme.surface)
         .navigationBarsPadding()
         .statusBarsPadding()

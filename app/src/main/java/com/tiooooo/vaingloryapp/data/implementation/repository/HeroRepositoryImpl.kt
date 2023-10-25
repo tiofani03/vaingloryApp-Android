@@ -23,4 +23,5 @@ class HeroRepositoryImpl
     }
 
     override suspend fun getDetailHero(heroId: Int) = localDataSource.getSelectedHero(heroId)
+    override suspend fun getDetailHeroRemote(heroId: Int) = remoteDataSource.getDetailHero(heroId)
 }

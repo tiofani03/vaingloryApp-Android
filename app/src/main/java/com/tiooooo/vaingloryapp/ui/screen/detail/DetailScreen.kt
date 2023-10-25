@@ -1,10 +1,5 @@
 package com.tiooooo.vaingloryapp.ui.screen.detail
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -13,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.tiooooo.vaingloryapp.ui.components.common.EmptyScreen
 import com.tiooooo.vaingloryapp.ui.components.common.LoadingScreen
 import com.tiooooo.vaingloryapp.utils.PaletteGenerator
 import kotlinx.coroutines.flow.collectLatest
@@ -24,6 +20,7 @@ fun DetailScreen(
     detailViewModel: DetailViewModel = hiltViewModel(),
 ) {/*----- declarations ----- */
     val selectedHero by detailViewModel.selectedHero.collectAsState()
+    val errorMessage by detailViewModel.errorMessage.collectAsState()
     val colorPalette by detailViewModel.colorPalette
     val context = LocalContext.current
 
@@ -42,10 +39,20 @@ fun DetailScreen(
             )
         }
     } ?: run {
-        LoadingScreen(
-            modifier = modifier,
-        )
+        if (errorMessage.isNotEmpty()){
+            EmptyScreen(
+                message = "Data tidak ditemukan"
+            ) {
+                detailViewModel.getDetailHeroRemote()
+            }
+        } else {
+            LoadingScreen(
+                modifier = modifier,
+            )
+        }
     }
+
+
 
     /*----- Effect ----- */
     LaunchedEffect(key1 = true) {

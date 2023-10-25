@@ -44,9 +44,11 @@ fun ItemSkin(
         Surface(shape = RoundedCornerShape(size = LARGE_PADDING)) {
             AsyncImage(
                 modifier = Modifier.fillMaxSize(),
-                model = ImageRequest.Builder(
-                    context = LocalContext.current
-                ).data(image).crossfade(true).build(),
+                model = ImageRequest
+                    .Builder(context = LocalContext.current)
+                    .data(image)
+                    .crossfade(true)
+                    .build(),
                 error = painterResource(R.drawable.ic_placeholder),
                 placeholder = painterResource(R.drawable.ic_placeholder),
                 contentDescription = stringResource(R.string.app_logo),
