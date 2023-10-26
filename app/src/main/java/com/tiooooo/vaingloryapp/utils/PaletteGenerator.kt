@@ -39,7 +39,7 @@ object PaletteGenerator {
     private fun parseColorSwatch(color: Palette.Swatch?) = if (color != null) {
         val parsedColor = Integer.toHexString(color.rgb)
         "#$parsedColor"
-    } else "#000000"
+    } else "#1e1e1e"
 
     private fun parseBodyColor(color: Int?): String = if (color != null) {
         val parsedColor = Integer.toHexString(color)

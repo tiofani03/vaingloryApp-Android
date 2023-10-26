@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tiooooo.vaingloryapp.data.model.Hero
 import com.tiooooo.vaingloryapp.data.api.repository.HeroRepository
+import com.tiooooo.vaingloryapp.data.model.Hero
 import com.tiooooo.vaingloryapp.utils.response.States
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -85,6 +84,10 @@ class DetailViewModel @Inject constructor(
     }
 
     fun setColoPalette(color: Map<String, String>) {
+        _colorPalette.value = color
+    }
+
+    fun setDefaultColorPalette(color: Map<String, String>) {
         _colorPalette.value = color
     }
 

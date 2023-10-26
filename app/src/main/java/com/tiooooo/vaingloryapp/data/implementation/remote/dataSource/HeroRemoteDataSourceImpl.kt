@@ -26,7 +26,7 @@ class HeroRemoteDataSourceImpl @Inject constructor(
     override fun getAllHeroes(): Flow<PagingData<Hero>> {
         val pagingSourceFactory = { heroDao.getAllHeroes() }
         return Pager(
-            config = PagingConfig(pageSize = 4),
+            config = PagingConfig(pageSize = 5),
             remoteMediator = HeroRemoteMediator(
                 heroApi = heroApi,
                 appDatabase = appDatabase,
@@ -37,7 +37,7 @@ class HeroRemoteDataSourceImpl @Inject constructor(
 
     override fun searchHeroes(query: String): Flow<PagingData<Hero>> {
         return Pager(
-            config = PagingConfig(pageSize = 3),
+            config = PagingConfig(pageSize = 5),
             pagingSourceFactory = {
                 SearchHeroesSource(heroApi, query)
             }
@@ -49,7 +49,7 @@ class HeroRemoteDataSourceImpl @Inject constructor(
             val response = heroApi.getHeroDetail(heroId)
 
             if (response.data == null) {
-                emit(States.Error("Data tidak ditemukan"))
+                emit(States.Error("Data not found"))
             } else {
                 emit(States.Success(response.data))
             }

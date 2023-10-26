@@ -10,7 +10,7 @@ interface HeroApi {
     @GET("vainglory/heroes")
     suspend fun getAllHeroes(
         @Query("page") page: Int = 1,
-        @Query("limit") limit: Int = 10,
+        @Query("limit") limit: Int = 5,
         @Query("name") search: String? = null,
     ): ApiResponse<List<Hero>>
 

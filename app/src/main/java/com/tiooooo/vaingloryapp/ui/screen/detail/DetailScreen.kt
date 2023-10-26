@@ -1,5 +1,7 @@
 package com.tiooooo.vaingloryapp.ui.screen.detail
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -11,6 +13,7 @@ import androidx.navigation.NavHostController
 import com.tiooooo.vaingloryapp.ui.components.common.EmptyScreen
 import com.tiooooo.vaingloryapp.ui.components.common.LoadingScreen
 import com.tiooooo.vaingloryapp.utils.PaletteGenerator
+import com.tiooooo.vaingloryapp.utils.toHex
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -21,6 +24,11 @@ fun DetailScreen(
 ) {/*----- declarations ----- */
     val selectedHero by detailViewModel.selectedHero.collectAsState()
     val errorMessage by detailViewModel.errorMessage.collectAsState()
+
+    val defaultVibrant = MaterialTheme.colorScheme.primary.toHex()
+    val defaultDarkVibrant = MaterialTheme.colorScheme.background.toHex()
+    val defaultOnDarkVibrant = MaterialTheme.colorScheme.secondary.toHex()
+
     val colorPalette by detailViewModel.colorPalette
     val context = LocalContext.current
 
@@ -35,23 +43,20 @@ fun DetailScreen(
         } else {
             detailViewModel.generateColorPalette()
             LoadingScreen(
-                modifier = modifier,
+                modifier = modifier.fillMaxSize(),
             )
         }
     } ?: run {
-        if (errorMessage.isNotEmpty()){
-            EmptyScreen(
-                message = "Data tidak ditemukan"
-            ) {
+        if (errorMessage.isNotEmpty()) {
+            EmptyScreen {
                 detailViewModel.getDetailHeroRemote()
             }
         } else {
             LoadingScreen(
-                modifier = modifier,
+                modifier = modifier.fillMaxSize(),
             )
         }
     }
-
 
 
     /*----- Effect ----- */
@@ -61,12 +66,20 @@ fun DetailScreen(
                 is UiEvent.GenerateColorPalette -> {
                     selectedHero?.let {
                         val bitmap = PaletteGenerator.convertImageUrlToBitmap(
-                            it.image, context
+                            it.imageBackground, context
                         )
 
-                        bitmap?.let {
+                        bitmap?.let { imageBitmap ->
                             detailViewModel.setColoPalette(
-                                color = PaletteGenerator.extractColorFromBitmap(it)
+                                color = PaletteGenerator.extractColorFromBitmap(imageBitmap)
+                            )
+                        } ?: kotlin.run {
+                            detailViewModel.setDefaultColorPalette(
+                                mapOf(
+                                    "vibrant" to defaultVibrant,
+                                    "darkVibrant" to defaultDarkVibrant,
+                                    "onDarkVibrant" to defaultOnDarkVibrant,
+                                )
                             )
                         }
                     }

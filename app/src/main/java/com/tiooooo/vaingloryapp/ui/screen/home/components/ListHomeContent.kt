@@ -9,10 +9,18 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.tiooooo.vaingloryapp.R
 import com.tiooooo.vaingloryapp.data.model.Hero
 import com.tiooooo.vaingloryapp.navigation.Screen
 import com.tiooooo.vaingloryapp.ui.components.common.EmptyScreen
@@ -34,34 +42,41 @@ fun ListContent(
         heroes = heroes,
         onRefresh = onRefresh,
     )
+    var isRefreshing by remember { mutableStateOf(false) }
 
     if (result) {
-        LazyVerticalStaggeredGrid(
-            modifier = modifier,
-            columns = StaggeredGridCells.Fixed(2),
-            verticalItemSpacing = EXTRA_SMALL_PADDING,
-            horizontalArrangement = Arrangement.spacedBy(EXTRA_SMALL_PADDING),
-            contentPadding = PaddingValues(SMALL_PADDING),
-            content = {
-                items(heroes.itemCount) { index ->
-                    val hero = heroes[index]
-                    hero?.let {
-                        ItemHero(modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .animateItemPlacement(
-                                tween(durationMillis = 300)
-                            ), hero = hero, onClick = { heroId ->
-                            navController.navigate(Screen.Detail.passHeroId(heroId = heroId))
-                        })
-                    } ?: kotlin.run {
-                        EmptyScreen {
-                            onRefresh()
+        SwipeRefresh(modifier = modifier,
+            swipeEnabled = true,
+            state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+            onRefresh = {
+                isRefreshing = true
+                onRefresh()
+                isRefreshing = false
+            }) {
+            LazyVerticalStaggeredGrid(
+                modifier = Modifier,
+                columns = StaggeredGridCells.Fixed(2),
+                verticalItemSpacing = EXTRA_SMALL_PADDING,
+                horizontalArrangement = Arrangement.spacedBy(EXTRA_SMALL_PADDING),
+                contentPadding = PaddingValues(SMALL_PADDING),
+                content = {
+                    items(heroes.itemCount) { index ->
+                        val hero = heroes[index]
+                        hero?.let {
+                            ItemHero(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .animateItemPlacement(tween(durationMillis = 300)),
+                                hero = hero,
+                                onClick = { heroId ->
+                                    navController.navigate(Screen.Detail.passHeroId(heroId = heroId))
+                                })
                         }
                     }
-                }
-            },
-        )
+                },
+            )
+        }
     }
 }
 
@@ -74,7 +89,7 @@ fun handlePagingResult(
         val error = when {
             loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
             loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
-            loadState.append is LoadState.Error -> loadState.append as LoadState.Error
+//            loadState.append is LoadState.Error -> loadState.append as LoadState.Error
             else -> null
         }
 
@@ -89,19 +104,23 @@ fun handlePagingResult(
                 false
             }
 
-            error != null -> {
+            heroes.itemCount == 0 -> {
                 EmptyScreen(
-                    message = parseErrorMessage(error),
+                    message = stringResource(id = R.string.no_data),
                     onRefresh = { onRefresh() }
                 )
                 false
             }
 
-
-
-            heroes.itemCount < 1 && loadState.prepend !is LoadState.Loading -> {
-                EmptyScreen { onRefresh() }
-                false
+            error != null -> {
+                val errorMessage = parseErrorMessage(error)
+                if (errorMessage == "No Internet Connection" && heroes.itemCount < 1) {
+                    EmptyScreen(
+                        message = parseErrorMessage(error),
+                        onRefresh = { onRefresh() }
+                    )
+                    false
+                } else true
             }
 
             else -> true

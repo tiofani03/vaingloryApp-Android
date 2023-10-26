@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tiooooo.vaingloryapp.data.model.Hero
+import com.tiooooo.vaingloryapp.ui.theme.LARGE_PADDING
 import com.tiooooo.vaingloryapp.ui.theme.MEDIUM_PADDING
 import com.tiooooo.vaingloryapp.ui.theme.SMALL_PADDING
 import com.tiooooo.vaingloryapp.utils.helper.listHeroes
@@ -27,8 +28,8 @@ fun BottomSheetContent(
     modifier: Modifier = Modifier,
     selectedHero: Hero,
     vibrant: Color = MaterialTheme.colorScheme.primary,
-    darkVibrant: Color = MaterialTheme.colorScheme.tertiary,
-    onDarkVibrant: Color = MaterialTheme.colorScheme.surface,
+    darkVibrant: Color = MaterialTheme.colorScheme.background,
+    onDarkVibrant: Color = MaterialTheme.colorScheme.secondary,
 ) {
     LazyColumn(
         modifier = modifier,
@@ -91,6 +92,12 @@ fun BottomSheetContent(
 @Composable
 fun BottomSheetContentPreview() {
     BottomSheetContent(
-        modifier = Modifier.background(MaterialTheme.colorScheme.tertiary), selectedHero = listHeroes.first()
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.onBackground)
+            .padding(bottom = LARGE_PADDING),
+        selectedHero = listHeroes.first(),
+        vibrant = MaterialTheme.colorScheme.primary,
+        darkVibrant = MaterialTheme.colorScheme.onBackground,
+        onDarkVibrant = MaterialTheme.colorScheme.secondary
     )
 }

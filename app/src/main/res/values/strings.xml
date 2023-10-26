@@ -2,7 +2,7 @@
     <string name="app_name">VaingloryApp</string>
     <string name="app_logo">App Logo</string>
     <string name="search_icon">search icon</string>
-    <string name="no_data">Tidak ada data</string>
+    <string name="no_data">Data Not Found</string>
     <string name="close_icon">close icon</string>
     <string name="on_boarding_image">On boarding Image</string>
 </resources>

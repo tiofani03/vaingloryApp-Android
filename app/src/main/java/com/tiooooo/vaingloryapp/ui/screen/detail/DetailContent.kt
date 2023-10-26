@@ -12,6 +12,7 @@ import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -21,17 +22,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.tiooooo.vaingloryapp.data.model.Hero
-import com.tiooooo.vaingloryapp.navigation.Screen
 import com.tiooooo.vaingloryapp.ui.screen.detail.components.BottomSheetBackground
 import com.tiooooo.vaingloryapp.ui.screen.detail.components.BottomSheetContent
 import com.tiooooo.vaingloryapp.ui.theme.EXPANDED_RADIUS_LEVEL
 import com.tiooooo.vaingloryapp.ui.theme.EXTRA_LARGE_PADDING
 import com.tiooooo.vaingloryapp.ui.theme.LARGE_PADDING
 import com.tiooooo.vaingloryapp.ui.theme.MIN_SHEET_HEIGHT
+import com.tiooooo.vaingloryapp.utils.toHex
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -46,6 +46,12 @@ fun DetailContent(
     var vibrant by remember { mutableStateOf("#000000") }
     var darkVibrant by remember { mutableStateOf("#000000") }
     var onDarkVibrant by remember { mutableStateOf("#FFFFFF") }
+
+
+    val defaultVibrant = MaterialTheme.colorScheme.primary.toHex()
+    val defaultDarkVibrant = MaterialTheme.colorScheme.onBackground.toHex()
+    val defaultOnDarkVibrant = MaterialTheme.colorScheme.secondary.toHex()
+
     val systemUiController = rememberSystemUiController()
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -66,9 +72,9 @@ fun DetailContent(
 
     /*----- Effect ----- */
     LaunchedEffect(key1 = selectedHero) {
-        vibrant = colors["vibrant"] ?: "#000000"
-        darkVibrant = colors["darkVibrant"] ?: "#000000"
-        onDarkVibrant = colors["onDarkVibrant"] ?: "#FFFFFF"
+        vibrant = colors["vibrant"] ?: defaultVibrant
+        darkVibrant = colors["darkVibrant"] ?: defaultDarkVibrant
+        onDarkVibrant = colors["onDarkVibrant"] ?: defaultOnDarkVibrant
     }
 
 
