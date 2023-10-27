@@ -34,7 +34,7 @@ The data for this application is sourced from a custom API created [specifically
 
 ### How to Use
 1. Clone this repository to your device.
-2. Open the project using Android Studio or another IDE.
+2. Open the project using Android Studio.
 3. Run the application on an emulator or physical device.
 
 ### Contribution
