@@ -6,6 +6,7 @@ import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.tiooooo.vaingloryapp.BuildConfig
 import com.tiooooo.vaingloryapp.data.implementation.local.AppDatabase
 import com.tiooooo.vaingloryapp.data.implementation.remote.api.HeroApi
 import com.tiooooo.vaingloryapp.data.implementation.remote.dataSource.HeroRemoteDataSourceImpl
@@ -40,7 +41,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofitInstance(@ApplicationContext context: Context): Retrofit {
         val contentType = "application/json".toMediaType()
-        return Retrofit.Builder().baseUrl(Constants.BASE_URl).client(provideHttpClient(context))
+        return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL).client(provideHttpClient(context))
             .addConverterFactory(Json.asConverterFactory(contentType)).build()
     }
 
